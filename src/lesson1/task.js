@@ -154,7 +154,7 @@ function order(arr) {
     }
 
     return 0;
-  }
+  };
 
   if (!arr.some(isNaN)) {
     return arr.sort(sortNumbers);
@@ -241,8 +241,48 @@ function calcExpression(expression) {
   либо бросает exception в случае ошибки.
   '100>5' => true
 */
-//TODO: -- implementation required
-function calcComparison(expression) {}
+// FIXME: -- all test are passed with implementation based on iterators, but NEW implementation required with something less heavyweight !!!
+function calcComparison(expression) {
+  const execExpression = (operandA, operandB, operation) => {
+    switch (operation) {
+      case '>':
+        return operandA > operandB;
+      case '<':
+        return operandA < operandB;
+      case '=':
+        return operandA === operandB;
+      case '>=':
+        return operandA >= operandB;
+      case '<=':
+        return operandA <= operandB;
+      default:
+        return false;
+    }
+  };
+
+  const parseExpression = () => {
+    const allowedOpers = ['>=', '<=', '=', '>', '<'];
+
+    for (const value of allowedOpers) {
+      if (expression.includes(value)) {
+        const index = expression.indexOf(value);
+        const operandA = Number(expression.slice(0, index));
+        let operandB;
+        if (value === '>=' || value === '<=') {
+          operandB = Number(expression.slice(index + 2, expression.length));
+        } else {
+          operandB = Number(expression.slice(index + 1, expression.length));
+        }
+        if (Number.isNaN(operandA) || Number.isNaN(operandB)) {
+          throw Error('Wrong params! Only numbers are required.');
+        }
+        return execExpression(operandA, operandB, value);
+      }
+    }
+  };
+
+  return parseExpression();
+}
 
 /*
   Напишите функцию, которая принимает обьект и строку,
