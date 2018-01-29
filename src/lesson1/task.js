@@ -292,8 +292,17 @@ function calcComparison(expression) {
   { a: { x: 2 }, b: 5 }, '.a.x' => 2
   { a: 1, b: 2 }, '.c' => exception
 */
-//TODO: -- implementation required
-function evalKey(obj, expression) {}
+//TODO: -- implementation of additional checks is required!
+function evalKey(obj, expression) {
+  if (expression.startsWith('.')) {
+    const result = expression.split('.').slice(1).reduce((accumulator, index) => accumulator && accumulator[index], obj);
+    if (result === undefined) {
+      throw Error('Error');
+    }
+    return result;
+  }
+  throw Error('Error');
+}
 
 export default {
   getDataType,
