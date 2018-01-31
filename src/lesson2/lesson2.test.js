@@ -1,4 +1,4 @@
-import lesson2 from '../src/lesson2';
+import lesson2 from '../lesson2';
 
 const {
   sum,
