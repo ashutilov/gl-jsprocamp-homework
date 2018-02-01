@@ -1,19 +1,18 @@
 /*
-  Write a function, that has 2 required parameters, and any amount of optional parameters. 
+  Write a function, that has 2 required parameters, and any amount of optional parameters.
   Function should return a number - amount of optional parameters that were passed into function.
   Hint: you are allowed to modify both function definition and function body.
 */
-export function countOptional() {
-
+function countOptional(a, b, ...optional) {
+  return optional.length;
 }
 
 /*
   Write your implementation of native Function.prototype.bind method
 */
-export function bindContext(fn, context) {
-
+function bindContext(fn, context, ...outArgs) {
+  return (...args) => fn.apply(context, [...outArgs, ...args]);
 }
-
 
 /*
   Write function that accepts 1 parameter - object. It should add to this object a log interface so as:
@@ -29,8 +28,11 @@ export function bindContext(fn, context) {
 
   Take to account, that you should track log call index starting from 1
 */
-export function addLogCapability(object) {
+function addLogCapability(object) {
+  let counter = 1;
+  const nameText = object.name ? `my name is ${object.name}` : 'I dont have name';
 
+  object.log = () => `Log message #${counter++}: ${nameText}`;
 }
 
 /*
@@ -38,15 +40,15 @@ export function addLogCapability(object) {
   myLogger = logger('My Topic')
   myLogger('first message'); //=> My Topic: first message
 */
-export function logger(topic) {
-
+function logger(topic) {
+  return msg => `${topic}: ${msg}`;
 }
 
 /*
   Implement left to right compose function
 */
-export function compose() {
-
+function compose(...funcs) {
+  return (...args) => funcs.reduce((previousValue, currentFunc) => currentFunc(previousValue), ...args);
 }
 
 /*
@@ -59,8 +61,8 @@ export function compose() {
   const sumWith4 = partialSum(4);
   sumWith4(5) // 9
 */
-export function partial(fn) {
-
+function partial(fn) {
+  return (...args) => fn.bind(null, ...args);
 }
 
 export default {
@@ -69,5 +71,5 @@ export default {
   addLogCapability,
   logger,
   compose,
-  partial
+  partial,
 };
