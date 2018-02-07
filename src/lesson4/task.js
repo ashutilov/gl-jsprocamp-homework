@@ -17,7 +17,7 @@ function MySet(arr) {
 MySet.prototype = {
   get size() {
     return this.values.length;
-  },
+  }
 };
 
 MySet.prototype.add = function add(value) {
@@ -33,7 +33,13 @@ MySet.prototype.has = function has(value) {
 };
 
 MySet.prototype.delete = function del(value) {
-  const index = this.values.indexOf(value);
+  const indexOfNaN = () =>
+    this.values.findIndex(element => Object.is(NaN, element));
+
+  const index =
+    Number.isNaN(value) && indexOfNaN !== -1
+      ? indexOfNaN
+      : this.values.indexOf(value);
 
   if (index !== -1) {
     this.values.splice(index, 1);
@@ -76,11 +82,11 @@ function MyMap(arr) {
 MyMap.prototype = {
   get size() {
     return this.entries.length;
-  },
+  }
 };
 
 MyMap.prototype.get = function add(key) {
-  return this.entries.find(element => element[0] === key);
+  return this.entries.find(element => (Number.isNaN(key) && Number.isNaN(element[0])) || element[0] === key);
 };
 
 MyMap.prototype.has = function has(key) {
@@ -100,7 +106,8 @@ MyMap.prototype.set = function add(key, value) {
 
 MyMap.prototype.delete = function del(key) {
   if (this.has(key)) {
-    this.entries = this.entries.filter(element => !(element[0] === key));
+    this.entries = this.entries.filter(element =>
+      !((Number.isNaN(key) && Number.isNaN(element[0])) || element[0] === key));
     return true;
   }
 
@@ -124,5 +131,5 @@ export function createMap(arr = []) {
 
 export default {
   createSet,
-  createMap,
+  createMap
 };
