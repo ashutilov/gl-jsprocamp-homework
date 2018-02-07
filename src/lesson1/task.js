@@ -237,6 +237,7 @@ function calcComparison(expression) {
 function evalKey(obj, expression) {
   if (expression.startsWith('.')) {
     const result = expression
+      .replace(/\s/g, '')
       .split('.')
       .slice(1)
       .reduce((accumulator, index) => accumulator && accumulator[index], obj);
