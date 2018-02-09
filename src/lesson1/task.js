@@ -63,7 +63,7 @@ function compareByType(a, b) {
   в любом другом случае возврвщвет -1
 */
 function increase(value) {
-  return typeof value === 'number' ? value + 1 : -1;
+  return Number.isFinite(value) ? value + 1 : -1;
 }
 
 /*
@@ -71,7 +71,10 @@ function increase(value) {
   и в случае если аргумент не Infinity или NaN возвращает строку 'safe' иначе 'danger'
 */
 function testForSafeNumber(value) {
-  return Number.isFinite(value) || !Number.isNaN(value) ? 'safe' : 'danger';
+  if (typeof value !== 'number') {
+    throw new Error('Wrong argument type!');
+  }
+  return Number.isFinite(value) ? 'safe' : 'danger';
 }
 
 // Strings
@@ -235,6 +238,10 @@ function calcComparison(expression) {
   { a: 1, b: 2 }, '.c' => exception
 */
 function evalKey(obj, expression) {
+  if (obj === null || typeof obj !== 'object' || typeof expression !== 'string') {
+    throw new TypeError('Wrong arguments');
+  }
+
   if (expression.startsWith('.')) {
     const result = expression
       .replace(/\s/g, '')
