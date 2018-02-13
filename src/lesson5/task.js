@@ -200,51 +200,61 @@ Monster.CLASSES = {
 };
 
 /* Game Population mechanism should go below */
-function createHero() {
-  const heroes = [
-    'Batman',
-    'Spider-Man',
-    'Iron Man',
-    'Boogerman',
-    'Captain America',
-    'Deadpool',
-    'Captain Marvel',
-    'Hulk',
-    'Thor',
-    'Wolverine',
-  ];
 
-  const heroName = getRandomElement(heroes);
-  const heroClass = getRandomElement(Object.keys(Hero.CLASSES));
-  return new Hero(heroName, heroClass);
+const gameAction = {
+  createHero: function createHero() {
+    const heroes = [
+      'Batman',
+      'Spider-Man',
+      'Iron Man',
+      'Boogerman',
+      'Captain America',
+      'Deadpool',
+      'Captain Marvel',
+      'Hulk',
+      'Thor',
+      'Wolverine',
+    ];
 
-}
+    const heroName = getRandomElement(heroes);
+    const heroClass = getRandomElement(Object.keys(Hero.CLASSES));
+    return new Hero(heroName, heroClass);
 
-function createMonster() {
-  const monsterClass = getRandomElement(Object.keys(Monster.CLASSES));
-  return new Monster(monsterClass);
+  },
+  createMonster: function createMonster() {
+    const monsterClass = getRandomElement(Object.keys(Monster.CLASSES));
+    return new Monster(monsterClass);
+  },
+  execFight: function execFight(game) {
+    let result;
+    if (this.checkLife(game)) {
+      console.log(game.finishJourney());
+    } else {
+      console.log(game.fight());
+      if (this.checkLife(game)) {
+        console.log(game.finishJourney());
+      }
+    }
+  },
+  checkLife: function checkLife(game) {
+    return game.hero.life === 0 || (game.monsters[0].life === 0 && game.monsters[1].life === 0);
+  },
+  addCharacters: function addCharacters(game) {
+    console.log(game.addHero(this.createHero()));
+    console.log(game.addMonster(this.createMonster()));
+    console.log(game.addMonster(this.createMonster()));
+  },
+  startJorney: function startJorney(game) {
+    console.log(game.beginJourney());
+  },
+};
 
-}
-
-function execFight(game) {
-  let result;
-  if (game.hero.life === 0 || (game.monsters[0].life === 0 && game.monsters[1].life === 0)) {
-    result = game.finishJourney();
-  } else {
-    result = game.fight();
-  }
-  return result;
-}
-
-// execute commands mentioned below one by one
+// execute commands mentioned below one by one & use console to see result
 const game = new Game();
-game.addHero(createHero());
-game.addMonster(createMonster());
-game.addMonster(createMonster());
-game.beginJourney();
-execFight(game);
-execFight(game);
-execFight(game);
+gameAction.addCharacters(game);
+gameAction.startJorney(game);
+gameAction.execFight(game);
+gameAction.execFight(game);
 
 /* End of your solution for Game Population mechanism */
 
